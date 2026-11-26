@@ -52,6 +52,7 @@
     /* ── 레이아웃 폭 ── */
     --width-layout-max:     1440px;
     --width-sidebar-left:   240px;
+    --width-splitter:       5px;
     --width-sidebar-right:  220px;
     --width-editor-max:     980px;
     --width-modal:          340px;
@@ -152,11 +153,38 @@ html, body {
 .layout {
     display: grid;
     max-width: var(--width-layout-max);
-    grid-template-columns: var(--width-sidebar-left) 1fr var(--width-sidebar-right);
+    grid-template-columns: var(--width-sidebar-left) var(--width-splitter) 1fr var(--width-sidebar-right);
     grid-template-rows: 100vh;
     height: 100vh;
     overflow: hidden;
     margin: 0 auto;
+}
+
+/* 왼쪽 사이드바 ↔ 에디터 가로 조절 핸들 */
+.layout-splitter {
+    width: var(--width-splitter);
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: var(--color-border);
+    cursor: col-resize;
+    touch-action: none;
+    transition: background var(--transition-fast);
+}
+
+.layout-splitter:hover,
+.layout-splitter:focus-visible,
+body.is-resizing-sidebar-left .layout-splitter {
+    background: var(--color-accent);
+}
+
+body.is-resizing-sidebar-left {
+    cursor: col-resize;
+    user-select: none;
+}
+
+body.is-resizing-sidebar-left #memo-editor {
+    pointer-events: none;
 }
 
 /* ── 왼쪽 사이드바 ───────────────────────────────────── */
@@ -248,7 +276,7 @@ html, body {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    padding: var(--space-6) 0;
+    padding: 0;
     position: relative;
     z-index: 1;
 }
@@ -267,7 +295,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: var(--gap-icon-row);
-    padding: var(--space-4) var(--space-5) var(--space-4) 0;
+    padding: var(--space-3) var(--space-4) var(--space-3) 0;
     font-size: var(--text-folder-row);
     font-weight: 600;
     color: var(--color-text-secondary);
@@ -381,7 +409,7 @@ html, body {
 
 .file-item-name {
     flex: 1;
-    padding: var(--space-5) var(--space-5) var(--space-5) 0;
+    padding: var(--space-2) var(--space-2) var(--space-2) 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -17,5 +17,5 @@ alwaysApply: false
 ## 모듈 공유·로드
 
 - 각 파일은 IIFE로 `window.App`에 메서드를 붙인다. `App.state`로 상태 공유.
-- `index.html` 로드 순서: `marked.min.js` → `state → db → toc → renderer → files → modal → editor → app`.
+- `index.html` 로드 순서: `marked.min.js` → `state → db → toc → renderer → files → modal → editor → layout → app`.
 - 새 함수·파일 추가 시에도 위 주석·로드 순서를 유지한다.

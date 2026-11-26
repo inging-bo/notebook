@@ -51,6 +51,7 @@ alwaysApply: true
 | `files.js` | 트리·CRUD, `openFileByRelPath`, `writeFile`, `setStatus` |
 | `modal.js` | 새 파일·폴더 모달 |
 | `editor.js` | 입력·paste·blur·IME·자동저장 |
+| `layout.js` | 왼쪽 사이드바↔에디터 스플리터, 너비 localStorage |
 | `app.js` | marked 설정, `connectDir()`, `init()` |
 
 기타: `css/index.css` 전체 스타일, `images/` 구 SVG 아이콘.

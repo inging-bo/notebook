@@ -9,6 +9,12 @@ window.App = {
     DB_STORE: 'handles',
     /** 사이드바에 나열할 파일 확장자 */
     EXTS:     ['.md'],
+    /** 왼쪽 사이드바 너비(localStorage) 키 */
+    LS_SIDEBAR_LEFT_WIDTH: 'sidebarLeftWidth',
+    /** 왼쪽 사이드바 너비 최소·최대·기본(px) — `layout.js` 스플리터와 동기 */
+    SIDEBAR_LEFT_MIN:     160,
+    SIDEBAR_LEFT_MAX:     480,
+    SIDEBAR_LEFT_DEFAULT: 240,
 
     state: {
         /** 연결된 memos 루트의 FileSystemDirectoryHandle */

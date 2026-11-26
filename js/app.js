@@ -102,6 +102,7 @@
         App.initTOCScrollSpy();
         App.initModalEvents();
         App.initFileSearchEvents();
+        App.initLayoutSplitter();
         initSidebarEvents();
 
         const saved = await App.idbGet('dir').catch(() => null);
