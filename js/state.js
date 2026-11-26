@@ -43,5 +43,9 @@ window.App = {
         fileSearchQuery: '',
         /** 마지막 `collectTree` 결과 — 검색 입력 시 재스캔 없이 필터 */
         fileTreeCache: null,
+        /** 내용 검색 디바운스용 `setTimeout` ID */
+        fileSearchTimer: null,
+        /** 비동기 검색 레이스 방지용 세대 번호 */
+        fileSearchGen: 0,
     },
 };
