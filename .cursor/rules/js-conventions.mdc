@@ -1,0 +1,21 @@
+---
+description: js/ 함수 주석·스크립트 로드·window.App 공유 규칙
+globs: js/**/*.js
+alwaysApply: false
+---
+
+# JS 규칙
+
+## 주석 (한국어 JSDoc)
+
+- `js/`의 **모든 함수**(`App.*` 공개·내부 `function`/`async function`) 바로 위에 `/** … */`로 역할 설명.
+- 매개변수·반환값이 비명확하면 `@param` / `@returns` 추가.
+- 짧은 내부 콜백(`commit`, `cancel`)은 한 줄 `/** … */` 또는 `//`로 충분.
+- `marked.use()` 객체 리터럴의 `start`/`tokenizer`/`renderer`는 메서드 위 `//` 한 줄.
+- `state.js`의 `window.App`·`state` 필드는 파일 상단 또는 필드 옆 `//`.
+
+## 모듈 공유·로드
+
+- 각 파일은 IIFE로 `window.App`에 메서드를 붙인다. `App.state`로 상태 공유.
+- `index.html` 로드 순서: `marked.min.js` → `state → db → toc → renderer → files → modal → editor → app`.
+- 새 함수·파일 추가 시에도 위 주석·로드 순서를 유지한다.

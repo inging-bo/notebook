@@ -1,0 +1,11 @@
+# 실제 메모·비밀 (절대 커밋 금지)
+memos/
+
+# IDE / 에디터 로컬 설정
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store

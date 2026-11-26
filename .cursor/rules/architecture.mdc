@@ -1,0 +1,56 @@
+---
+description: 레이아웃·편집 데이터 흐름·state·모듈 역할
+alwaysApply: true
+---
+
+# 아키텍처
+
+## 3열 레이아웃
+
+- 왼쪽 `#file-tabs` — 디렉터리 재귀 스캔, 폴더 접기/펼치기·이름 변경·삭제·하위 md 생성
+- 중앙 `#memo-editor` — `marked.parse()`로 렌더하는 `contenteditable`
+- 오른쪽 `#toc` — 현재 파일 헤딩 TOC
+
+## 편집 데이터 흐름
+
+1. 파일 열기 → Markdown 읽기 → `renderContent()` → `#memo-editor` HTML
+2. 편집 → `input` → `htmlToMarkdown()` → `state.rawContent`
+3. 자동 저장: 입력 멈춤 후 약 400ms 디바운스 → `writeFile()` (IME `compositionend`·blur·탭 숨김 시 flush)
+
+## `App.state` (`js/state.js`)
+
+| 필드 | 의미 |
+|---|---|
+| `dirHandle` | 연결 루트 `FileSystemDirectoryHandle` |
+| `fileHandle` | 현재 파일 핸들 |
+| `openRelPath` | 상대 경로 (`폴더/파일.md`) |
+| `expandedFolders` | 펼친 폴더 경로 `Set` |
+| `rawContent` | 저장 기준 Markdown |
+| `saveTimer` | 자동 저장 타이머 |
+| `isComposing` | CJK IME 조합 중 `input` 차단 |
+| `newFileParentRelPath` | 새 파일 모달 부모 경로 (`null` = 루트) |
+
+## IndexedDB (`memo_fs` / `handles`)
+
+- `'dir'` — 디렉터리 핸들
+- `'lastFile'` — 마지막 파일 **상대 경로**
+
+## 이름 변경
+
+- 파일: 읽기 → 새 이름 쓰기 → 구 파일 삭제 (네이티브 rename 없음)
+- 폴더: `move()` 있으면 사용, 없으면 트리 복사 후 원본 삭제
+
+## `js/` 모듈
+
+| 파일 | 역할 |
+|---|---|
+| `state.js` | `App` 상수·`state` |
+| `db.js` | `openDB`, `idbGet`, `idbPut` |
+| `renderer.js` | `headingId`, `renderContent`, `htmlToMarkdown` |
+| `toc.js` | `renderTOC`, `initTOCScrollSpy` |
+| `files.js` | 트리·CRUD, `openFileByRelPath`, `writeFile`, `setStatus` |
+| `modal.js` | 새 파일·폴더 모달 |
+| `editor.js` | 입력·paste·blur·IME·자동저장 |
+| `app.js` | marked 설정, `connectDir()`, `init()` |
+
+기타: `css/index.css` 전체 스타일, `images/` 구 SVG 아이콘.

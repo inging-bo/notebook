@@ -1,0 +1,20 @@
+---
+description: 로컬메모장 프로젝트 개요·실행 방법·공통 제약
+alwaysApply: true
+---
+
+# 로컬메모장
+
+브라우저에서만 동작하는 로컬 Markdown 메모장. [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API)로 폴더의 `.md`를 직접 읽고 쓴다. **Chrome / Edge 필수.**
+
+## 실행
+
+- 빌드 없음. `index.html`을 Chrome·Edge에서 열거나 로컬 정적 서버로 서빙.
+- 최초 폴더 선택 시 핸들을 IndexedDB에 저장 → 이후 재접속 시 복원.
+- Google Drive 동기화 폴더는 **로컬 경로**로 연다 (`drive.google.com` 미리보기 X).
+
+## 제약
+
+- 번들러·프레임워크 없음. 외부 의존성은 `marked.min.js` 하나.
+- ES 모듈 사용 안 함 → `file://` 직접 열기 가능.
+- 인라인 `onclick` 금지. 이벤트는 각 파일의 `init*Events()`에서 `addEventListener`로 등록.
