@@ -127,9 +127,9 @@
     --text-editor-table:  14px;
 
     /* ── TOC 링크 추가 들여쓰기 (h1 기준 padding-left에 더함) ── */
-    --toc-indent-h2: 14px;
-    --toc-indent-h3: 26px;
-    --toc-indent-h4: 36px;
+    --toc-indent-h2: 18px;
+    --toc-indent-h3: 28px;
+    --toc-indent-h4: 38px;
 
     /* ── z-index 레이어 ── */
     --z-overlay:  999;
@@ -153,14 +153,14 @@ html, body {
 .layout {
     display: grid;
     max-width: var(--width-layout-max);
-    grid-template-columns: var(--width-sidebar-left) var(--width-splitter) 1fr var(--width-sidebar-right);
+    grid-template-columns: var(--width-sidebar-left) var(--width-splitter) 1fr var(--width-splitter) var(--width-sidebar-right);
     grid-template-rows: 100vh;
     height: 100vh;
     overflow: hidden;
     margin: 0 auto;
 }
 
-/* 왼쪽 사이드바 ↔ 에디터 가로 조절 핸들 */
+/* 사이드바 ↔ 에디터 가로 조절 핸들 (좌·우 공통) */
 .layout-splitter {
     width: var(--width-splitter);
     margin: 0;
@@ -174,16 +174,19 @@ html, body {
 
 .layout-splitter:hover,
 .layout-splitter:focus-visible,
-body.is-resizing-sidebar-left .layout-splitter {
+body.is-resizing-sidebar-left #splitter-left,
+body.is-resizing-sidebar-right #splitter-right {
     background: var(--color-accent);
 }
 
-body.is-resizing-sidebar-left {
+body.is-resizing-sidebar-left,
+body.is-resizing-sidebar-right {
     cursor: col-resize;
     user-select: none;
 }
 
-body.is-resizing-sidebar-left #memo-editor {
+body.is-resizing-sidebar-left #memo-editor,
+body.is-resizing-sidebar-right #memo-editor {
     pointer-events: none;
 }
 
@@ -199,7 +202,7 @@ body.is-resizing-sidebar-left #memo-editor {
 
 .sidebar-logo {
     display: flex;
-    padding: var(--space-10) var(--space-10) var(--space-8);
+    padding: var(--space-5);
     border-bottom: var(--border-hairline) solid var(--color-border);
     flex-shrink: 0;
     justify-content: space-between;
@@ -556,7 +559,7 @@ body.is-resizing-sidebar-left #memo-editor {
 .content-body {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-10) var(--space-10) var(--space-13);
+    padding: var(--space-8) var(--space-8) var(--space-10);
 }
 
 /* ── 에디터 ───────────────────────────────────────────── */
@@ -679,40 +682,62 @@ body.is-resizing-sidebar-left #memo-editor {
     border-left: var(--border-hairline) solid var(--color-border);
     background: var(--color-surface);
     overflow-y: auto;
-    padding: var(--space-12) 0;
+    padding: var(--space-2) 0;
 }
 
-.toc-title {
-    font-size: var(--text-toc-label);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-text-faint);
-    text-transform: uppercase;
-    padding: 0 var(--space-10) var(--space-5);
+/*
+ * TOC 굵기·크기: h1 기준값과 step만 바꾸면 하위가 calc로 이어받음.
+ * 예) --toc-weight-h1: 600, --toc-weight-step: 100 → 600 / 500 / 400 / 300
+ */
+#toc {
+    --toc-weight-h1: 600;
+    --toc-weight-step: 100;
+    --toc-weight-h2: calc(var(--toc-weight-h1) - var(--toc-weight-step));
+    --toc-weight-h3: calc(var(--toc-weight-h2) - var(--toc-weight-step));
+    --toc-weight-h4: calc(var(--toc-weight-h3) - var(--toc-weight-step));
+    --toc-weight-active-boost: 100;
+
+    --toc-size-h1: 13px;
+    --toc-size-step: 0.5px;
+    --toc-size-h2: calc(var(--toc-size-h1) - var(--toc-size-step));
+    --toc-size-h3: calc(var(--toc-size-h2) - var(--toc-size-step));
+    --toc-size-h4: calc(var(--toc-size-h3) - var(--toc-size-step));
 }
 
 #toc a {
+    --toc-link-weight: var(--toc-weight-h1);
+    --toc-link-size: var(--toc-size-h1);
     display: block;
-    padding: var(--space-2) var(--space-10);
-    font-size: var(--text-toc-link);
+    padding: var(--space-2) var(--space-5);
+    font-size: var(--toc-link-size);
+    font-weight: var(--toc-link-weight);
     color: var(--color-text-muted);
     text-decoration: none;
-    line-height: 1.5;
+    line-height: 1.2;
     transition: color var(--transition-fast);
 }
 
 #toc a:hover { color: var(--color-accent); }
-#toc a.active { color: var(--color-accent); font-weight: 600; }
+#toc a.active {
+    color: var(--color-accent);
+    font-weight: calc(var(--toc-link-weight) + var(--toc-weight-active-boost));
+}
 
-#toc a.toc-h2 { padding-left: calc(var(--space-10) + var(--toc-indent-h2)); }
+#toc a.toc-h2 {
+    --toc-link-weight: var(--toc-weight-h2);
+    --toc-link-size: var(--toc-size-h2);
+    padding-left: var(--toc-indent-h2);
+}
 #toc a.toc-h3 {
-    padding-left: calc(var(--space-10) + var(--toc-indent-h3));
-    font-size: var(--text-toc-nested);
+    --toc-link-weight: var(--toc-weight-h3);
+    --toc-link-size: var(--toc-size-h3);
+    padding-left: var(--toc-indent-h3);
     color: var(--color-text-faint);
 }
 #toc a.toc-h4 {
-    padding-left: calc(var(--space-10) + var(--toc-indent-h4));
-    font-size: var(--text-toc-nested);
+    --toc-link-weight: var(--toc-weight-h4);
+    --toc-link-size: var(--toc-size-h4);
+    padding-left: var(--toc-indent-h4);
     color: var(--color-text-toc-h4);
 }
 

@@ -15,6 +15,12 @@ window.App = {
     SIDEBAR_LEFT_MIN:     160,
     SIDEBAR_LEFT_MAX:     480,
     SIDEBAR_LEFT_DEFAULT: 240,
+    /** 오른쪽 TOC 너비(localStorage) 키 */
+    LS_SIDEBAR_RIGHT_WIDTH: 'sidebarRightWidth',
+    /** 오른쪽 TOC 너비 최소·최대·기본(px) — `layout.js` 스플리터와 동기 */
+    SIDEBAR_RIGHT_MIN:     140,
+    SIDEBAR_RIGHT_MAX:     400,
+    SIDEBAR_RIGHT_DEFAULT: 220,
 
     state: {
         /** 연결된 memos 루트의 FileSystemDirectoryHandle */
